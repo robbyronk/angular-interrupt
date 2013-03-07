@@ -1,71 +1,92 @@
 ;(function (_) {
   'use strict';
 
-  angular.module('interrupt', ['ngCookies', 'ngResource', '$strap.directives', 'easyXdm'])
-    .controller('piuInterrupt', ['$cookies', '$resource', '$scope', 'false',
-      function(cookies, resource, scope, interrupt){
+  angular.module('interrupt', ['ui.bootstrap.dialog', 'ngCookies'])
+    .controller('interrupt', ['$scope', '$log', '$dialog', '$cookies', 'false', 'true',
+      function (scope, log, dialog, cookies, sraInterrupt, piuInterrupt) {
 
-        var cookieName = 'piuInterrupt';
+        var sraOptions = {
+          backdrop: true,
+          backdropFade: true,
+          dialogFade: true,
+          keyboard: false,
+          backdropClick: false,
+          controller: 'sraUpdate',
+          templateUrl: 'sra-modal.html'
+        }
+        var piuOptions = {
+          backdrop: true,
+          backdropFade: true,
+          dialogFade: true,
+          keyboard: false,
+          backdropClick: false,
+          templateUrl: 'piu-modal.html'
+        }
 
-        if(_.isUndefined(cookies[cookieName])){
+        var sra = dialog.dialog(sraOptions);
+        var piu = dialog.dialog(piuOptions);
 
-          console.log('cookie was not set');
+        var cookieName = 'doNotInterrupt';
+        if (_.isUndefined(cookies[cookieName])) {
 
-          interrupt.fetch(scope).then(function(result) {
-            if(_.isBoolean(result)) {
-              if(result){
-
-                console.log('resource was true, showing modal');
-
-                // modal.show() is sometimes ready after the partial has been loaded,
-                // thus we need to wait for it to load
-                var runShowWhenReady = function() {
-                  if(_.isUndefined(scope.show))
-                    setTimeout(runShowWhenReady, 1000);
-                  else
-                    scope.show();
+          sraInterrupt.get().then(function (openSraModal) {
+            if (openSraModal) {
+              sra.open().then(function (result) {
+                // TODO update sra with result
+                // if that is successful, set cookie
+                cookies[cookieName] = 'y';
+              });
+            }
+            else {
+              piuInterrupt.get().then(function (openPiuModal) {
+                if(openPiuModal) {
+                  piu.open();
                 }
-                runShowWhenReady();
-              } else {
-                console.log('resource was false, setting cookie');
-                cookies[cookieName] = 'yes';
-              }
-            } else {
-              console.log('Bad result from server. We should log this on a server somewhere.');
+                else {
+                  cookies[cookieName] = 'y';
+                }
+              });
             }
           });
-        } else {
-          console.log('cookie was set, not doing anything');
         }
-      }])
-    .service('interrupt', ['EasyXdm',
-      function(easyXdm) {
+
+      }
+    ])
+    .controller('sraUpdate', ['$log', '$scope', 'dialog',
+      function (log, scope, dialog) {
+
+        scope.close = function (result) {
+          dialog.close(result);
+        }
+
+      }
+    ])
+    .service('true', ['$q',
+      function (q) {
         return {
-          fetch: function (scope) {
-            return easyXdm.fetch(scope, '/wsapi/rest/staffwebinterruptrequired?popuptype=piu');
-          }
-        }
-      }])
-    .service('true', function() {
-      return {
-        fetch: function () {
-          return {
-            then: function(callback) {
-              callback(true);
-            }
+          'get': function () {
+            var deferred = q.defer();
+
+            deferred.resolve(true);
+
+            return deferred.promise;
           }
         }
       }
-    })
-    .service('false', function() {
-      return {
-        fetch: function () {
-          return {
-            then: function(callback) {
-              callback(false);
-            }
+    ])
+    .service('false', ['$q',
+      function (q) {
+        return {
+          'get': function () {
+            var deferred = q.defer();
+
+            deferred.resolve(false);
+
+            return deferred.promise;
           }
         }
       }
-    })
+    ])
+
+
 })(_.noConflict());
