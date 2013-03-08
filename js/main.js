@@ -1,9 +1,9 @@
-;(function (_) {
+;(function () {
   'use strict';
 
-  angular.module('interrupt', ['ui.bootstrap.dialog', 'ngCookies'])
-    .controller('interrupt', ['$scope', '$log', '$dialog', '$cookies', 'false', 'true',
-      function (scope, log, dialog, cookies, sraInterrupt, piuInterrupt) {
+  angular.module('interrupt', ['ui.bootstrap.dialog', 'ngCookies', 'ngResource', 'easyXdm'])
+    .controller('interrupt', ['$scope', '$log', '$dialog', '$cookies', 'sraInterrupt', 'piuInterrupt', 'sraUpdate',
+      function (scope, log, dialog, cookies, sraInterrupt, piuInterrupt, sraUpdate) {
 
         var sraOptions = {
           backdrop: true,
@@ -11,7 +11,7 @@
           dialogFade: true,
           keyboard: false,
           backdropClick: false,
-          controller: 'sraUpdate',
+          controller: 'modal',
           templateUrl: 'sra-modal.html'
         }
         var piuOptions = {
@@ -20,6 +20,7 @@
           dialogFade: true,
           keyboard: false,
           backdropClick: false,
+          controller: 'modal',
           templateUrl: 'piu-modal.html'
         }
 
@@ -29,16 +30,16 @@
         var cookieName = 'doNotInterrupt';
         if (_.isUndefined(cookies[cookieName])) {
 
-          sraInterrupt.get().then(function (openSraModal) {
+          sraInterrupt.get(scope).then(function (openSraModal) {
             if (openSraModal) {
               sra.open().then(function (result) {
-                // TODO update sra with result
-                // if that is successful, set cookie
-                cookies[cookieName] = 'y';
+                sraUpdate.save(scope, result).then(function(successResponse){
+                  cookies[cookieName] = 'y';
+                })
               });
             }
             else {
-              piuInterrupt.get().then(function (openPiuModal) {
+              piuInterrupt.get(scope).then(function (openPiuModal) {
                 if(openPiuModal) {
                   piu.open();
                 }
@@ -52,7 +53,7 @@
 
       }
     ])
-    .controller('sraUpdate', ['$log', '$scope', 'dialog',
+    .controller('modal', ['$log', '$scope', 'dialog',
       function (log, scope, dialog) {
 
         scope.close = function (result) {
@@ -87,6 +88,33 @@
         }
       }
     ])
+    .service('piuInterrupt', ['EasyXdm',
+      function (easyXdm) {
+        return {
+          'get': function (scope) {
+            return easyXdm.fetch(scope, '/wsapi/rest/staffwebinterruptrequired?popuptype=piu', result);
+          }
+        }
+      }
+    ])
+    .service('sraInterrupt', ['EasyXdm',
+      function (easyXdm) {
+        return {
+          'get': function (scope) {
+            return easyXdm.fetch(scope, '/wsapi/rest/staffwebinterruptrequired?popuptype=sra', result);
+          }
+        }
+      }
+    ])
+    .service('sraUpdate', ['EasyXdm',
+      function (easyXdm) {
+        return {
+          'save': function (scope, result) {
+            return easyXdm.fetch(scope, '/wsapi/rest/staffwebinterruptrequired/sraupdate', 'POST', result);
+          }
+        }
+      }
+    ])
 
 
-})(_.noConflict());
+})();

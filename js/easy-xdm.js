@@ -14,7 +14,8 @@
 
 
 //      var schemeHostAndPort = 'http://localhost:8680';
-      var schemeHostAndPort = 'http://hart-a321.net.ccci.org:8680';
+//      var schemeHostAndPort = 'http://hart-a321.net.ccci.org:8680';
+      var schemeHostAndPort = 'https://wsapi-stage.cru.org';
 //      var schemeHostAndPort = 'https://wsapi.ccci.org';
 
       var xhr;
@@ -39,7 +40,10 @@
       var cache = $cacheFactory('EasyXdm-Cache');
 
       return {
-        fetch: function (scope, pathAndQueryString) {
+        fetch: function (scope, pathAndQueryString, method, result) {
+          if(_.isUndefined(method))
+            method = "GET";
+
           var deferred = $q.defer();
 
           var url = schemeHostAndPort + pathAndQueryString;
@@ -79,7 +83,7 @@
           function sendRequestToUrl(retryOnUnauthorized) {
             xhr.request({
               url: url,
-              method: "GET"
+              method: method
             }, function (response) {
               scope.$apply(function () {
                 if (response.status == 200) {
@@ -114,9 +118,9 @@
                 sendRequestToUrl(false);
               }
               else {
-                alert("It appears you are not logged in to Relay.  Attempting to reload the page...");
+//                alert("It appears you are not logged in to Relay.  Attempting to reload the page...");
                 deferred.reject("User is not logged in");
-                window.top.location.reload();
+//                window.top.location.reload();
               }
             }, function (errorPayload) {
               var message = errorPayload.message;
