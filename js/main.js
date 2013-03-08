@@ -92,7 +92,7 @@
       function (easyXdm) {
         return {
           'get': function (scope) {
-            return easyXdm.fetch(scope, '/wsapi/rest/staffwebinterruptrequired?popuptype=piu', result);
+            return easyXdm.fetch(scope, '/wsapi/rest/staffwebinterruptrequired?popuptype=piu');
           }
         }
       }
@@ -101,7 +101,7 @@
       function (easyXdm) {
         return {
           'get': function (scope) {
-            return easyXdm.fetch(scope, '/wsapi/rest/staffwebinterruptrequired?popuptype=sra', result);
+            return easyXdm.fetch(scope, '/wsapi/rest/staffwebinterruptrequired?popuptype=sra');
           }
         }
       }
