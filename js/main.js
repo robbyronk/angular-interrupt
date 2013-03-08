@@ -37,7 +37,6 @@
                   cookies[cookieName] = 'y';
                 }, function(error){
                     alert("System Error! We apologize the failure of your submit request. Please contact to it.help@cru.org");
-                    window.top.location.reload();
                 })
               });
             }
