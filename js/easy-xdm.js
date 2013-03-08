@@ -13,10 +13,28 @@
       }
 
 
-//      var schemeHostAndPort = 'http://localhost:8680';
-//      var schemeHostAndPort = 'http://hart-a321.net.ccci.org:8680';
-      var schemeHostAndPort = 'https://wsapi-stage.cru.org';
-//      var schemeHostAndPort = 'https://wsapi.ccci.org';
+      var schemeHostAndPort;
+      //   var schemeHostAndPort = 'http://hart-a321.net.ccci.org:8680';
+      //   var schemeHostAndPort = 'https://wsapi-stage.cru.org';
+      //  var schemeHostAndPort = 'https://wsapi.cru.org';
+
+      if(window.location.href.toString().indexOf('http://staffweb.cru.org') > -1){
+          schemeHostAndPort = 'https://wsapi.cru.org';
+          log("prod WSAPI");
+      }
+      else  if(window.location.href.toString().indexOf('ucm-dev.ccci.org') > -1){
+          schemeHostAndPort='https://wsapi-stage.cru.org';
+          log("stage WSAPI");
+      }
+      else if(window.location.href.toString().indexOf('http://localhost') > -1){
+          schemeHostAndPort='http://localhost:8680';
+          log("local WSAPI");
+      }
+      else{
+          schemeHostAndPort='http://hart-a321.net.ccci.org:8680';
+          log("test WSAPI");
+      }
+
 
       var xhr;
 
