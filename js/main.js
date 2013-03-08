@@ -41,7 +41,9 @@
             else {
               piuInterrupt.get(scope).then(function (openPiuModal) {
                 if(openPiuModal) {
-                  piu.open();
+                  piu.open().then(function (result){
+                    cookies[cookieName] = 'y';
+                  });
                 }
                 else {
                   cookies[cookieName] = 'y';
@@ -118,3 +120,13 @@
 
 
 })();
+
+
+/**
+ * to be used by embedded frames in a modals that need to close the
+ * modal. (at the moment, the PIU interrupt is the only one in this category)
+ */
+function dismissInterruptModal()
+{
+    angular.element('.modal').scope().close();
+}
