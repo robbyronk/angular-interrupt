@@ -112,7 +112,7 @@
       function (easyXdm) {
         return {
           'save': function (scope, result) {
-            return easyXdm.fetch(scope, '/wsapi/rest/staffwebinterruptrequired/sraupdate', 'POST', result);
+            return easyXdm.fetch(scope, '/wsapi/rest/staffwebinterruptrequired/sraupdate', 'POST', {status: result});
           }
         }
       }
