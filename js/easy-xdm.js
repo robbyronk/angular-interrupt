@@ -40,9 +40,9 @@
       var cache = $cacheFactory('EasyXdm-Cache');
 
       return {
-        fetch: function (scope, pathAndQueryString, method, result) {
+        fetch: function (scope, pathAndQueryString, method, postData) {
           if(_.isUndefined(method))
-            method = "GET";
+            method = 'GET';
 
           var deferred = $q.defer();
 
@@ -131,8 +131,39 @@
             });
           }
 
+          function sendPostRequestToUrl(retryOnUnauthorized, postData) {
+            xhr.request({
+              url: url,
+              method: 'POST',
+              data: postData
+            }, function (response) {
+              scope.$apply(function () {
+                if (response.status == 200) {
+                  handleSuccessfulResponse(response);
+                }
+                else {
+                  //TODO: what to do here?
+                  handleFailedRequest(response);
+                }
+              });
+            }, function (errorPayload) {
+              scope.$apply(function () {
+                var response = errorPayload.data;
+                if (retryOnUnauthorized && response != undefined && response.status == 401) {
+                  handleNotAuthorizedResponse();
+                }
+                else {
+                  handleFailedRequest(response);
+                }
+              });
+            });
+          }
+
           if (cache.get(pathAndQueryString) == undefined) {
-            sendRequestToUrl(true);
+            if (method === 'GET')
+              sendRequestToUrl(true);
+            else
+              sendPostRequestToUrl(true, postData);
           }
           else {
             var resolution = cache.get(pathAndQueryString);
