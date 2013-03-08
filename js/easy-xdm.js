@@ -18,7 +18,7 @@
       //   var schemeHostAndPort = 'https://wsapi-stage.cru.org';
       //  var schemeHostAndPort = 'https://wsapi.cru.org';
 
-      if(window.location.href.toString().indexOf('http://staffweb.cru.org') > -1){
+      if(window.location.href.toString().indexOf('https://staffweb.cru.org') > -1){
           schemeHostAndPort = 'https://wsapi.cru.org';
           log("prod WSAPI");
       }
