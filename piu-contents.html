@@ -12,18 +12,13 @@
        More info: h5bp.com/i/378 -->
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-  <title>Interrupt Prototype</title>
+  <title>Frame Content</title>
   <meta name="description" content="">
 
   <!-- Mobile viewport optimized: h5bp.com/viewport -->
   <meta name="viewport" content="width=device-width">
 
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory: mathiasbynens.be/notes/touch-icons -->
-
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.2.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.2.2/css/bootstrap-responsive.min.css">
-
-  <!-- More ideas for your <head> here: h5bp.com/d/head-Tips -->
 
   <!-- All JavaScript at the bottom, except this Modernizr build.
        Modernizr enables HTML5 elements & feature detects for optimal performance.
@@ -38,22 +33,21 @@
       <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p>
   <![endif]-->
 
-  <h1>Yello' World!</h1>
+  <h1>The Inside Frame!</h1>
 
-  <div data-ng-app="interrupt">
-      <div data-ng-controller="interrupt"></div>
-  </div>
+  <button type="button" onclick="dismissTopWindowInterruptModal()">Dismiss from the Inside!</button>
 
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.0.3/angular.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.0.3/angular-cookies.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.0.3/angular-resource.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore.js"></script>
-  <script src="http://angular-ui.github.com/bootstrap/ui-bootstrap-0.2.0.js"></script>
-  <script src="js/easyXDM.min.js"></script>
 
-  <script src="js/easy-xdm.js"></script>
-  <script src="js/main.js"></script>
+  <script type="text/javascript">
+      function dismissTopWindowInterruptModal()
+      {
+          if (window.top.dismissInterruptModal)
+          {
+              window.top.dismissInterruptModal();
+          }
+      }
+  </script>
 
 <!-- end scripts -->
 
