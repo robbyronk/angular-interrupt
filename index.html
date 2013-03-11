@@ -40,6 +40,19 @@
 
   <h1>Yello' World!</h1>
 
+
+  <script>
+      /* this is used in main.js to configure template urls for the modal interrupt dialogs.  Because
+      * UCM variable replacement only works in templates and not assets, we can't put this variable
+      * replacement in main.js
+      */
+      window.relativeFragmentsRoot = "/modals";
+      //in UCM:
+      /*
+      window.relativeFragmentsRoot = "<!--$HttpRelativeFragmentsRoot-->";
+      */
+  </script>
+
   <div data-ng-app="interrupt">
       <div data-ng-controller="interrupt"></div>
   </div>
