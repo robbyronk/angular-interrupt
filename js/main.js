@@ -12,7 +12,7 @@
           keyboard: false,
           backdropClick: false,
           controller: 'modal',
-          templateUrl: 'sra-modal.html'
+          templateUrl: window.relativeFragmentsRoot + '/sra-modal.html'  //in UCM: window.relativeFragmentsRoot + 'frag_sw_assets/piu-intercept/affirmation.html'
         }
         var piuOptions = {
           backdrop: true,
@@ -21,7 +21,7 @@
           keyboard: false,
           backdropClick: false,
           controller: 'modal',
-          templateUrl: 'piu-modal.html'
+          templateUrl: window.relativeFragmentsRoot + '/piu-modal.html'  //in UCM: window.relativeFragmentsRoot + 'frag_sw_assets/piu-intercept/modal.html'
         }
 
         var sra = dialog.dialog(sraOptions);
