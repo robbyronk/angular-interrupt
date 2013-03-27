@@ -37,8 +37,9 @@
                   cookies[cookieName] = 'y';
                 }, function(error){
                     alert("System Error! We apologize the failure of your submit request. Please contact to it.help@cru.org");
-                })
+                });
               });
+              addClassToModalDivWhenAvailable('div.modal-header', 'sra');
             }
             else {
               piuInterrupt.get(scope).then(function (openPiuModal) {
@@ -46,6 +47,8 @@
                   piu.open().then(function (result){
                     cookies[cookieName] = 'y';
                   });
+
+                  addClassToModalDivWhenAvailable('div.modal-header', 'piu');
                 }
                 else {
                   cookies[cookieName] = 'y';
@@ -53,6 +56,22 @@
               });
             }
           });
+        }
+
+        function addClassToModalDivWhenAvailable(divSelector, className)
+        {
+          var childDiv = jQuery(divSelector);
+          if (childDiv.length)
+          {
+            childDiv.closest('div.modal').addClass(className);
+          }
+          else
+          {
+            setTimeout(function(){
+                addClassToModalDivWhenAvailable(divSelector, className);
+            }, 10);
+          }
+
         }
 
       }
