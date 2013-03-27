@@ -48,7 +48,7 @@
                     cookies[cookieName] = 'y';
                   });
 
-                  addClassToModalDivWhenAvailable('div#piu-modal-container', 'piu');
+                  addClassToModalDivWhenAvailable('div.modal-header', 'piu');
                 }
                 else {
                   cookies[cookieName] = 'y';
