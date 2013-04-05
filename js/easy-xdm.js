@@ -6,7 +6,7 @@
       function ($q, $cacheFactory) {
 
       function log(something) {
-        if (console.log) {
+        if (window.console && window.console.log) {
           if (something != undefined)
             console.log(something);
         }
