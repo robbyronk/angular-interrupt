@@ -2,16 +2,8 @@
 
 (function () {
   angular.module('easyXdm', [])
-    .service('EasyXdm', ['$q', '$cacheFactory',
-      function ($q, $cacheFactory) {
-
-      function log(something) {
-        if (console.log) {
-          if (something != undefined)
-            console.log(something);
-        }
-      }
-
+    .service('EasyXdm', ['$q', '$cacheFactory', '$log',
+      function ($q, $cacheFactory, $log) {
 
       var schemeHostAndPort;
       //   var schemeHostAndPort = 'http://hart-a321.net.ccci.org:8680';
@@ -20,19 +12,19 @@
 
       if(window.location.href.toString().indexOf('https://staffweb.cru.org') > -1){
           schemeHostAndPort = 'https://wsapi.cru.org';
-          log("prod WSAPI");
+          $log.log("prod WSAPI");
       }
       else  if(window.location.href.toString().indexOf('ucm-dev.ccci.org') > -1){
           schemeHostAndPort='https://wsapi-stage.cru.org';
-          log("stage WSAPI");
+          $log.log("stage WSAPI");
       }
       else if(window.location.href.toString().indexOf('http://localhost') > -1){
           schemeHostAndPort='http://localhost:8680';
-          log("local WSAPI");
+          $log.log("local WSAPI");
       }
       else{
           schemeHostAndPort='http://hart-a321.net.ccci.org:8680';
-          log("test WSAPI");
+          $log.log("test WSAPI");
       }
 
 
@@ -80,10 +72,10 @@
           }
 
           function handleFailedRequest(response) {
-            log("request to " + url + " failed.");
+            $log.error("request to " + url + " failed.");
             var message;
             if (response) {
-              log(response);
+              $log.error(response);
               message = "Request failed; response code is " + response.status + " when calling " + url;
             }
             else {
@@ -143,8 +135,8 @@
             }, function (errorPayload) {
               var message = errorPayload.message;
               var response = errorPayload.data;
-              log("unable to check if logged in to cas: " + message);
-              log(response);
+              $log.error("unable to check if logged in to cas: " + message);
+              $log.error(response);
               deferred.reject("Unable to check if logged in to cas; response code " + response.status);
             });
           }
